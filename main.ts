@@ -1,10 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-// Tiny stack VM for make.fun's ISA v1: 32-bit wrapping ints, 256-value data
-// stack, 64-deep call stack, 256 words of memory, 10 traps. Runs every
-// program under <inputDir>/<id>/ and answers in <outputDir>/<id>/.
-
 const IN_DIR = process.argv[2] || "/input";
 const OUT_DIR = process.argv[3] || "/output";
 
@@ -45,8 +41,6 @@ function run(prog: Buffer, input: Buffer): { out: Buffer; exit: number } {
     pc = next;
     switch (op) {
       case 0x00: return end(0);
-      // Unreachable: the table above already rejects unknown opcodes
-      // with trap 5, but a default keeps the switch total.
       default: return end(5);
       case 0x01: D[sp++] = (prog[pc - 1] << 24) >> 24; break;
       case 0x02:
